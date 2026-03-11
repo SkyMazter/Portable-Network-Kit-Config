@@ -1,0 +1,27 @@
+services:
+  ghost:
+    image: ghost:latest
+    restart: always
+    ports:
+      - 2368:2368
+    environment:
+      url: http://192.168.1.171:2368
+      database__client: mysql
+      database__connection__host: db
+      database__connection__user: ${GHOST_USER}
+      database__connection__password: ${GHOST_PASSWORD}
+      database__connection__database: ${GHOST_DATABASE}
+    depends_on:
+      - db
+    volumes:
+      - ./ghost-data:/var/lib/ghost/content
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${GHOST_DB_ROOTPASSWORD}
+      MYSQL_DATABASE: ${GHOST_DATABASE}
+      MYSQL_USER: ${GHOST_USER}
+      MYSQL_PASSWORD: ${GHOST_PASSWORD}
+    volumes:
+      - ./mysql-data:/var/lib/mysql

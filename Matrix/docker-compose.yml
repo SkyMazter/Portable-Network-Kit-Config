@@ -1,0 +1,31 @@
+services:
+  synapse:
+    container_name: synapse
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile
+    image: docker.io/matrixdotorg/synapse:latest
+    restart: unless-stopped
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    volumes:
+      - ./files:/data
+    depends_on:
+      - postgres-db
+    ports:
+      - 8008:8008
+
+  postgres-db:
+    container_name: postgres-db
+    image: docker.io/postgres:15-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - ./schemas:/var/lib/postgresql/data
+  cinny:
+    container_name: cinny
+    image: ajbura/cinny:latest
+    ports:
+      - 9002:80
