@@ -1,3 +1,27 @@
+#!/bin/bash
+
+set -e
+
+echo "Installing OwnCloud..."
+cd ~
+echo "Creating OwnCloud Directory..."
+mkdir -p owncloud
+cd owncloud
+
+echo "Creating .env file..."
+cat <<EOF > .env
+OWNCLOUD_VERSION=10.16
+OWNCLOUD_DOMAIN=localhost:8080
+OWNCLOUD_TRUSTED_DOMAINS=localhost
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=$(openssl rand -base64 16)
+OWNCLOUD_DB_USERNAME=owncloud
+OWNCLOUD_DB_PASSWORD=$(openssl rand -base64 16)
+HTTP_PORT=9003
+EOF
+
+echo "Creating docker-compose.yml..."
+cat <<EOF > docker-compose.yml
 services:
   owncloud:
     image: owncloud/server:${OWNCLOUD_VERSION}
@@ -67,3 +91,28 @@ volumes:
     driver: local
   redis:
     driver: local
+EOF
+
+echo "Starting containers..."
+sudo docker compose up -d
+
+echo "OwnCloud setup complete!"
+
+echo "Updating the master .env records..."
+
+SOURCE=".env"
+DEST="/home/admin/.env"
+
+if [ -f "$DEST" ]; then
+    echo "Destination File exists..."
+    echo "#####OWNCLOUD#####" >> "$DEST"
+    cat "$SOURCE" >> "$DEST"
+else
+    echo "File does not exist..."
+    echo "#####OWNCLOUD#####" >> "$DEST"
+
+    cat "$SOURCE" >> "$DEST"
+    echo "Master .env file created..."
+fi
+
+

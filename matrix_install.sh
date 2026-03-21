@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 echo "Starting Synapse setup..."
@@ -96,5 +95,22 @@ echo "Cinny setup complete."
 echo "Create your admin user"
 
 docker exec -it synapse register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml
+
+echo "Updating the master .env records..."
+
+SOURCE=".env"
+DEST="/home/admin/.env"
+
+if [ -f "$DEST" ]; then
+    echo "Destination File exists..."
+    echo "#####MATRIX#####" >> "$DEST"
+    cat "$SOURCE" >> "$DEST"
+else
+    echo "File does not exist..."
+    echo "#####MATRIX#####" >> "$DEST"
+
+    cat "$SOURCE" >> "$DEST"
+    echo "Master .env file created..."
+fi
 
 echo "You can now access Matrix via Cinny on http://$HOSTNAME:9002"

@@ -1,3 +1,6 @@
+#!/bin/bash
+
+set -e
 echo "Starting UniFi OS Server installation..."
 
 # Ensure script is running as root
