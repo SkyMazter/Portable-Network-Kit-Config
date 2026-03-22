@@ -24,24 +24,24 @@ echo "Creating docker-compose.yml..."
 cat <<EOF > docker-compose.yml
 services:
   owncloud:
-    image: owncloud/server:${OWNCLOUD_VERSION}
+    image: owncloud/server:\${OWNCLOUD_VERSION}
     container_name: owncloud_server
     restart: always
     ports:
-      - ${HTTP_PORT}:8080
+      - \${HTTP_PORT}:8080
     depends_on:
       - mariadb
       - redis
     environment:
-      - OWNCLOUD_DOMAIN=${OWNCLOUD_DOMAIN}
-      - OWNCLOUD_TRUSTED_DOMAINS=${OWNCLOUD_TRUSTED_DOMAINS}
+      - OWNCLOUD_DOMAIN=\${OWNCLOUD_DOMAIN}
+      - OWNCLOUD_TRUSTED_DOMAINS=\${OWNCLOUD_TRUSTED_DOMAINS}
       - OWNCLOUD_DB_TYPE=mysql
       - OWNCLOUD_DB_NAME=owncloud
-      - OWNCLOUD_DB_USERNAME=${OWNCLOUD_DB_USERNAME}
-      - OWNCLOUD_DB_PASSWORD=${OWNCLOUD_DB_PASSWORD}
+      - OWNCLOUD_DB_USERNAME=\${OWNCLOUD_DB_USERNAME}
+      - OWNCLOUD_DB_PASSWORD=\${OWNCLOUD_DB_PASSWORD}
       - OWNCLOUD_DB_HOST=mariadb
-      - OWNCLOUD_ADMIN_USERNAME=${ADMIN_USERNAME}
-      - OWNCLOUD_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - OWNCLOUD_ADMIN_USERNAME=\${ADMIN_USERNAME}
+      - OWNCLOUD_ADMIN_PASSWORD=\${ADMIN_PASSWORD}
       - OWNCLOUD_MYSQL_UTF8MB4=true
       - OWNCLOUD_REDIS_ENABLED=true
       - OWNCLOUD_REDIS_HOST=redis
@@ -60,12 +60,12 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=owncloud
       - MYSQL_USER=owncloud
-      - MYSQL_PASSWORD=${OWNCLOUD_DB_USERNAME}
-      - MYSQL_DATABASE=${OWNCLOUD_DB_PASSWORD}
+      - MYSQL_PASSWORD=\${OWNCLOUD_DB_USERNAME}
+      - MYSQL_DATABASE=\${OWNCLOUD_DB_PASSWORD}
       - MARIADB_AUTO_UPGRADE=1
     command: ["--max-allowed-packet=128M", "--innodb-log-file-size=64M"]
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=${OWNCLOUD_DB_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=\${OWNCLOUD_DB_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5

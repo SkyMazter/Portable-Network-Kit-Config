@@ -31,30 +31,30 @@ services:
       - postgres
     environment:
       NODE_ENV: production
-      ADMIN_PASSWORD: ${DOCKER_COMPOSE_APP_ADMIN_PASSWORD:-admin}
-      DB_CHARSET: ${DOCKER_COMPOSE_APP_DB_CHARSET:-utf8mb4}
+      ADMIN_PASSWORD: \${DOCKER_COMPOSE_APP_ADMIN_PASSWORD:-admin}
+      DB_CHARSET: \${DOCKER_COMPOSE_APP_DB_CHARSET:-utf8mb4}
       DB_HOST: postgres
-      DB_NAME: ${POSTGRES_DATABASE}
-      DB_PASS: ${POSTGRES_PASSWORD}
-      DB_PORT: ${POSTGRES_PORT}
+      DB_NAME: \${POSTGRES_DATABASE}
+      DB_PASS: \${POSTGRES_PASSWORD}
+      DB_PORT: \${POSTGRES_PORT}
       DB_TYPE: "postgres"
-      DB_USER: ${POSTGRES_USER}
+      DB_USER: \${POSTGRES_USER}
       # For now, the env var DEFAULT_PAD_TEXT cannot be unset or empty; it seems to be mandatory in the latest version of etherpad
-      DEFAULT_PAD_TEXT: ${DOCKER_COMPOSE_APP_DEFAULT_PAD_TEXT:- }
-      DISABLE_IP_LOGGING: ${DOCKER_COMPOSE_APP_DISABLE_IP_LOGGING:-false}
-      SOFFICE: ${DOCKER_COMPOSE_APP_SOFFICE:-null}
-      TRUST_PROXY: ${DOCKER_COMPOSE_APP_TRUST_PROXY:-true}
+      DEFAULT_PAD_TEXT: \${DOCKER_COMPOSE_APP_DEFAULT_PAD_TEXT:- }
+      DISABLE_IP_LOGGING: \${DOCKER_COMPOSE_APP_DISABLE_IP_LOGGING:-false}
+      SOFFICE: \${DOCKER_COMPOSE_APP_SOFFICE:-null}
+      TRUST_PROXY: \${DOCKER_COMPOSE_APP_TRUST_PROXY:-true}
     restart: always
     ports:
-      - "${DOCKER_COMPOSE_APP_PORT_PUBLISHED:-9001}:${DOCKER_COMPOSE_APP_PORT_TARGET:-9001}"
+      - "\${DOCKER_COMPOSE_APP_PORT_PUBLISHED:-9001}:\${DOCKER_COMPOSE_APP_PORT_TARGET:-9001}"
 
   postgres:
     image: docker.io/postgres:15-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DATABASE}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: \${POSTGRES_DATABASE}
+      POSTGRES_PASSWORD: \${POSTGRES_PASSWORD}
+      POSTGRES_PORT: \${POSTGRES_PORT}
+      POSTGRES_USER: \${POSTGRES_USER}
       PGDATA: /var/lib/postgresql/data/pgdata
     restart: always
     #   - "5432:5432"

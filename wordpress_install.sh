@@ -21,10 +21,10 @@ services:
     image: mariadb:latest
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${ROOT_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: \${ROOT_DB_PASSWORD}
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wpuser
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: \${DB_PASSWORD}
     volumes:
       - ./db_data:/var/lib/mysql
 
@@ -36,7 +36,7 @@ services:
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wpuser
-      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_PASSWORD: \${DB_PASSWORD}
       WORDPRESS_DB_NAME: wordpress
     depends_on:
       - db
