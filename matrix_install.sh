@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-echo "Starting Synapse setup..."
+echo "Starting Matrix setup..."
 
-SYNAPSE_DIR="$HOME/synapse"
+SYNAPSE_DIR="$HOME/matrix"
 
 # Create directory
-echo "Creating Synapse directory..."
+echo "Creating Matrix directory..."
 mkdir -p "$SYNAPSE_DIR"
 cd "$SYNAPSE_DIR"
 
@@ -30,6 +30,7 @@ services:
     restart: unless-stopped
     environment:
       - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+      - SYNAPSE_REPORT_STATS=yes
     volumes:
       - ./files:/data
     depends_on:
@@ -62,17 +63,17 @@ mkdir -p schemas
 # Ask for server name
 read -p "Enter your Matrix server name (example: matrix.example.com): " SERVER_NAME
 
-echo "Generating Synapse configuration..."
+echo "Generating Matrix configuration..."
 
 sudo docker compose run --rm \
   -e SYNAPSE_SERVER_NAME="$SERVER_NAME" \
   -e SYNAPSE_REPORT_STATS=yes \
   synapse generate
 
-echo "Starting Synapse containers..."
+echo "Starting Matrix containers..."
 sudo docker compose up -d
 
-echo "Waiting for Synapse container to initialize..."
+echo "Waiting for Matrix container to initialize..."
 sleep 10
 
 echo ""
@@ -85,8 +86,10 @@ echo ""
 docker compose run --rm -e SYNAPSE_SERVER_NAME=$SERVER_NAME synapse generate
 
 # Modify config
-sed -i '/registration_shared_secret:/d' files/homeserver.yaml
-sed -i '/report_stats:/i enable_registration: true\nenable_registration_without_verification: true' files/homeserver.yaml
+cat <<EOF | sudo tee -a homeserver.yaml > /dev/null
+enable_registration: true
+enable_registration_without_verification: true
+EOF
 
 # Start server
 docker compose up -d
