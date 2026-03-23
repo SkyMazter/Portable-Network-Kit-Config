@@ -12,11 +12,12 @@ echo "Creating .env file..."
 cat <<EOF > .env
 OWNCLOUD_VERSION=10.16
 OWNCLOUD_DOMAIN=localhost:8080
-OWNCLOUD_TRUSTED_DOMAINS=localhost
+OWNCLOUD_TRUSTED_DOMAINS=localhost, pnkv4, pnkv4.local
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=$(openssl rand -base64 16)
 OWNCLOUD_DB_USERNAME=owncloud
 OWNCLOUD_DB_PASSWORD=$(openssl rand -base64 16)
+OWNCLOUD__ROOTDB_PASSWORD=$(openssl rand -base64 16)
 HTTP_PORT=9003
 EOF
 
@@ -58,10 +59,10 @@ services:
     container_name: owncloud_mariadb
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=owncloud
-      - MYSQL_USER=owncloud
-      - MYSQL_PASSWORD=\${OWNCLOUD_DB_USERNAME}
-      - MYSQL_DATABASE=\${OWNCLOUD_DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=\${OWNCLOUD__ROOTDB_PASSWORD}
+      - MYSQL_USER=\${OWNCLOUD_DB_USERNAME}
+      - MYSQL_PASSWORD=\${OWNCLOUD_DB_PASSWORD}
+      - MYSQL_DATABASE=owncloud
       - MARIADB_AUTO_UPGRADE=1
     command: ["--max-allowed-packet=128M", "--innodb-log-file-size=64M"]
     healthcheck:
