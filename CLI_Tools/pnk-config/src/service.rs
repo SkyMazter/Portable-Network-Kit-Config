@@ -1,8 +1,8 @@
 use std::process::{Command, Stdio};
 
 pub fn get_service_stat() {
-    let output = Command::new("docker")
-        .args(&["container", "ls"])
+    let output = Command::new("ls")
+        .args("-l")
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
         .output()
