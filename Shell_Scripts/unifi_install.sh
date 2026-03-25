@@ -6,7 +6,7 @@ echo "Starting UniFi OS Server installation..."
 # Ensure script is running as root
 if [ "$EUID" -ne 0 ]; then
   echo "Please run this script as root:"
-  echo "sudo ./install_unifi_os.sh"
+  echo "sudo ./unifi_install.sh"
   exit 1
 fi
 

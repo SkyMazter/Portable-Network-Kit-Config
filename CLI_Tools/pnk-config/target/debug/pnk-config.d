@@ -1,0 +1,1 @@
+/Users/oscar/Documents/CodingProjects/PNK/PNK\ Docker\ Files/CLI_Tools/pnk-config/target/debug/pnk-config: /Users/oscar/Documents/CodingProjects/PNK/PNK\ Docker\ Files/CLI_Tools/pnk-config/src/main.rs /Users/oscar/Documents/CodingProjects/PNK/PNK\ Docker\ Files/CLI_Tools/pnk-config/src/service.rs
