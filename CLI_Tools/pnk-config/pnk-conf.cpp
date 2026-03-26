@@ -91,8 +91,9 @@ int main() {
     if (ans == 'y') {
 
       runScript(
-          ".~/applications/Portable-Network-Kit-Config/Shell_Scripts/dummy.sh",
-          ".~/applications/Portable-Network-Kit-Config/Shell_Scripts/dummy.sh");
+          "./~/applications/Portable-Network-Kit-Config/Shell_Scripts/dummy.sh",
+          "./~/applications/Portable-Network-Kit-Config/Shell_Scripts/"
+          "dummy.sh");
     } else {
       cout << "Closing Script..." << endl;
     }
