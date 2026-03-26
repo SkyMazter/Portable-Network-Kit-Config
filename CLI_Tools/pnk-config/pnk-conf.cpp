@@ -90,7 +90,9 @@ int main() {
     cin >> ans;
     if (ans == 'y') {
 
-      runScript("./docker_install", "./docker_install");
+      runScript(
+          "./~/applications/Portable-Network-Kit-Config/Shell_Scripts/dummy.sh",
+          "./~/applications/Portable-Network-Kit-Config/Shell_Script/dummy.sh");
     } else {
       cout << "Closing Script..." << endl;
     }
