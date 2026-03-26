@@ -83,16 +83,16 @@ int main() {
   if (isDockerInstalled() == true) {
     cout << "Docker is installed! Proceeding to next check..." << endl;
   } else {
-    cout
-        << "Docker is not installed!, Would you like to install docker?: (y/N)";
+    cout << "Docker is not installed!, Would you like to install docker?"
+            "(y/N): ";
 
     char ans;
     cin >> ans;
     if (ans == 'y') {
 
       runScript(
-          "./~/applications/Portable-Network-Kit-Config/Shell_Scripts/dummy.sh",
-          "./~/applications/Portable-Network-Kit-Config/Shell_Script/dummy.sh");
+          ".~/applications/Portable-Network-Kit-Config/Shell_Scripts/dummy.sh",
+          ".~/applications/Portable-Network-Kit-Config/Shell_Scripts/dummy.sh");
     } else {
       cout << "Closing Script..." << endl;
     }
