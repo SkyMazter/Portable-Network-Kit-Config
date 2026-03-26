@@ -8,6 +8,8 @@ void getDockerStat() {
 
   if (returnCode == 256) {
     std::cout << "Docker does not seem to be running." << std::endl;
+  } else if (returnCode == 32512) {
+    std::cout << "Docker is not installed" << std::endl;
   } else {
     std::cout << "Command failed with return code: " << returnCode << std::endl;
   }
