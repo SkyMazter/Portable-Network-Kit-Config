@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <cstdio>
 #include <iostream>
 #include <stdio.h>
@@ -20,7 +21,7 @@ void getDockerStat() {
     dup2(pipefd[1], STDOUT_FILENO);
     close(pipefd[1]);
 
-    execlp("docker", "docker", "ps");
+    execlp("docker", "docker", "ps", NULL);
 
     perror("unable to execure command");
     _exit(1);
