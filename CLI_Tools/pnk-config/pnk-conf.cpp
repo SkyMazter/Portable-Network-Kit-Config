@@ -4,11 +4,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <sys/_types/_pid_t.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
 using namespace std;
+
+bool isDockerInstalled() {
+  pid_t pid = fork();
+  if (pid == 0) {
+    execlp("docker", "docker", "--version", NULL);
+    _exit(127);
+  } else {
+    int status;
+    waitpid(pid, &status, 0);
+    if (WIFEXITED(status)) {
+      int exitCode = WEXITSTATUS(status);
+      return exitCode == 0; // return true
+    }
+  }
+  return false;
+}
 
 void getDockerStat() {
   int pipefd[2];
@@ -50,6 +67,21 @@ void getDockerStat() {
 }
 
 int main() {
-  getDockerStat();
+  // cout << isDockerInstalled() << endl;
+
+  if (isDockerInstalled() == true) {
+    cout << "Docker is installed! Proceeding to next check..." << endl;
+  } else {
+    cout << "Docker is not installed!, Would you like to install docker?"
+         << endl;
+
+    char ans;
+    cin >> ans;
+    if (ans == 'y') {
+
+    } else {
+      cout << "Closing Script..." << endl;
+    }
+  }
   return 0;
 }
