@@ -102,7 +102,7 @@ echo "OwnCloud setup complete!"
 echo "Updating the master .env records..."
 
 SOURCE=".env"
-DEST="/home/admin/.env"
+DEST="~/.env"
 
 if [ -f "$DEST" ]; then
     echo "Destination File exists..."
@@ -115,5 +115,3 @@ else
     cat "$SOURCE" >> "$DEST"
     echo "Master .env file created..."
 fi
-
-
