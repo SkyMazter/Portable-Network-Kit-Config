@@ -10,7 +10,9 @@
 
 using namespace std;
 
-void runScript(string file, string arg) {
+string runScript(string file, string arg) {
+  int pipefd[2];
+  pipe(pipefd); // pipefd[0] = read, pipefd[1] = write
   pid_t pid = fork();
 
   const char *c_file = file.c_str();
@@ -18,10 +20,27 @@ void runScript(string file, string arg) {
   char *args[] = {(char *)c_file, (char *)c_arg};
 
   if (pid == 0) {
+    close(pipefd[0]);
+
+    dup2(pipefd[1], STDOUT_FILENO);
+    close(pipefd[1]);
+
     execlp(args[0], args[1], NULL);
     perror("unable to execure command");
   } else {
+    close(pipefd[1]);
+    string output;
+    char buffer[1024];
+    ssize_t count;
+
+    while ((count = read(pipefd[0], buffer, sizeof(buffer))) > 0) {
+      output.append(buffer, count);
+    }
+
+    return "Captured: \n" + output;
+    close(pipefd[0]);
   }
+  return "There was an Error executing the command...";
 }
 
 bool isDockerInstalled() {
@@ -78,22 +97,36 @@ bool isDockerInstalled() {
 //     cerr << "Fork failed\n";
 //   }
 // }
+//
+bool isContainerRunning(string container_name) {
+  pid_t pid = fork();
+  container_name = "name=" + container_name;
+  const char *c_container_name = container_name.c_str();
+  const char *args[] = {(char *)c_container_name};
+
+  if (pid == 0) {
+    execlp("docker", "container", "ps", "--filter", c_container_name, NULL);
+    perror("unable to run docker command");
+  } else {
+  }
+
+  return false;
+}
 
 int main() {
+
   if (isDockerInstalled() == true) {
     cout << "Docker is installed! Proceeding to next check..." << endl;
+    isContainerRunning("mariadb");
   } else {
     cout << "Docker is not installed!, Would you like to install docker?"
             "(y/N): ";
-
     char ans;
     cin >> ans;
     if (ans == 'y') {
-
-      runScript(
-          "./~/applications/Portable-Network-Kit-Config/Shell_Scripts/dummy.sh",
-          "./~/applications/Portable-Network-Kit-Config/Shell_Scripts/"
-          "dummy.sh");
+      cout << runScript("./dummy.sh", "./dummy.sh"
+                                      "dummy.sh")
+           << endl;
     } else {
       cout << "Closing Script..." << endl;
     }
