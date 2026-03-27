@@ -29,7 +29,7 @@ sudo systemctl start docker
 
 sudo systemctl enable docker
 
-sudo usermod -aG docker $WHOAMI
+sudo usermod -aG docker admin
 
 echo "Checking Docker installation..."
 

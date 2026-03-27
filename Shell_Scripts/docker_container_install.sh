@@ -56,7 +56,7 @@ echo "Wordpress setup complete!"
 echo "Updating the master .env records..."
 
 SOURCE=".env"
-DEST="/home/admin/.env"
+DEST="~/.env"
 
 if [ -f "$DEST" ]; then
     echo "Destination File exists..."
@@ -143,7 +143,7 @@ echo "Etherpad setup complete!"
 echo "Updating the master .env records..."
 
 SOURCE=".env"
-DEST="/home/admin/.env"
+DEST="~/.env"
 
 if [ -f "$DEST" ]; then
     echo "Destination File exists..."
@@ -265,7 +265,7 @@ echo "OwnCloud setup complete!"
 echo "Updating the master .env records..."
 
 SOURCE=".env"
-DEST="/home/admin/.env"
+DEST="~/.env"
 
 if [ -f "$DEST" ]; then
     echo "Destination File exists..."
@@ -385,7 +385,7 @@ docker exec -it synapse register_new_matrix_user http://localhost:8008 -c /data/
 echo "Updating the master .env records..."
 
 SOURCE=".env"
-DEST="/home/admin/.env"
+DEST="~/.env"
 
 if [ -f "$DEST" ]; then
     echo "Destination File exists..."

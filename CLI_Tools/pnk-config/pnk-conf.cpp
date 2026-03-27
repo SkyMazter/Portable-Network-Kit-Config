@@ -133,6 +133,8 @@ bool isContainerRunning(string container_name) {
     }
 
     regex pattern("\\b" + container_name + "\\b");
+    bool isActive = regex_search(output, pattern);
+    return isActive;
   }
 
   return false;
@@ -142,8 +144,8 @@ int main() {
 
   if (isDockerInstalled() == true) {
     cout << "Docker is installed! Proceeding to next check..." << endl;
-    // isContainerRunning("mariadb");
-    cout << runScript({"docker", "ps", "--filter", "name=suspicious_euler"});
+    cout << isContainerRunning("suspicious_euler");
+    // cout << runScript({"docker", "ps", "--filter", "name=suspicious_euler"});
   } else {
     cout << "Docker is not installed!, Would you like to install docker?"
             "(y/N): ";
