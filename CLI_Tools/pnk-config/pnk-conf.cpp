@@ -124,22 +124,19 @@ bool isContainerRunning(string container_name)
 
 void checkContainerStatus(const string container_name)
 {
-  const string script_name = "./" + container_name + "_install.sh";
+  const string script_name = "./" + container_name + "_installation.sh";
+  bool container_status = isContainerRunning(container_name);
 
-  if (isContainerRunning(container_name))
+  if (container_status)
     return;
 
   regex pattern("\\b" + container_name + "\\b");
   const string shell_output = runScript({"docker", "image", "list"});
+
   bool is_installed = regex_search(shell_output, pattern);
 
-  if (is_installed)
+  if (!is_installed)
   {
-    cout << "" << endl;
-  }
-  else
-  {
-
     cout << container_name
          << " is not installed yet!, Would you like to run it's install script?"
             "(y/N): ";
@@ -147,6 +144,23 @@ void checkContainerStatus(const string container_name)
     cin >> ans;
     (ans == 'y') ? cout << runScript({"bash", script_name}) << endl
                  : cout << "Closing Script..." << endl;
+    }
+
+  if (!container_status)
+  {
+    cout << "The " + container_name + " container is not running...\n"
+         << "Would you like to run the installation script? (y/N): ";
+    char ans;
+    cin >> ans;
+    if (ans == 'y')
+    {
+      cout << runScript({"bash", "./" + container_name + "_installation.sh"}) << endl;
+    }
+    else
+    {
+      cout << "Skipping Installation Script..." << endl;
+      exit;
+    }
   }
 }
 
@@ -154,12 +168,7 @@ int main()
 {
   const vector<string> container_names = {"dummy", "dummy", "dummy"};
 
-  if (isDockerInstalled() == true)
-  {
-    cout << "Docker is installed! Proceeding to next check..." << endl;
-    checkContainerStatus("wordpress");
-  }
-  else
+  if (!isDockerInstalled())
   {
     cout << "Docker is not installed!, Would you like to install docker?"
             "(y/N): ";
@@ -178,25 +187,7 @@ int main()
 
   cout << "Docker is installed! Proceeding to next check..." << endl;
 
-  for_each(container_names.begin(), container_names.end(), [](string container_name)
-           {
-             bool container_status = isContainerRunning(container_name);
-             if (!container_status)
-             {
-               cout << "The " + container_name + " container is not running...\n"
-                    << "Would you like to run the installation script? (y/N): ";
-               char ans;
-               cin >> ans;
-               if (ans == 'y')
-               {
-                 cout << runScript({"bash", "./" + container_name + "_installation.sh"}) << endl;
-               }
-               else
-               {
-                 cout << "Skipping Installation Script..." << endl;
-                 exit;
-               }
-             } });
+  for_each(container_names.begin(), container_names.end(), checkContainerStatus);
 
   return 0;
 }
