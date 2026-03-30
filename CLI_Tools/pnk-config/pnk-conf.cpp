@@ -142,16 +142,6 @@ void checkContainerStatus(const string container_name)
             "(y/N): ";
     char ans;
     cin >> ans;
-    (ans == 'y') ? cout << runScript({"bash", script_name}) << endl
-                 : cout << "Closing Script..." << endl;
-    }
-
-  if (!container_status)
-  {
-    cout << "The " + container_name + " container is not running...\n"
-         << "Would you like to run the installation script? (y/N): ";
-    char ans;
-    cin >> ans;
     if (ans == 'y')
     {
       cout << runScript({"bash", "./" + container_name + "_installation.sh"}) << endl;
@@ -159,14 +149,22 @@ void checkContainerStatus(const string container_name)
     else
     {
       cout << "Skipping Installation Script..." << endl;
-      exit;
+      return;
     }
+  }
+
+  if (!container_status)
+  {
+    cout << runScript({"bash"
+                       "./test/test.sh"})
+         << endl;
+    // cout << runScript({"ls"}) << endl;
   }
 }
 
 int main()
 {
-  const vector<string> container_names = {"dummy", "dummy", "dummy"};
+  const vector<string> container_names = {"wordpress", "matrix", "dummy"};
 
   if (!isDockerInstalled())
   {
