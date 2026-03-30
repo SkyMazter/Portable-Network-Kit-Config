@@ -111,17 +111,55 @@ bool isContainerRunning(string container_name)
     }
 
     regex pattern("\\b" + container_name + "\\b");
-    bool isActive = regex_search(output, pattern);
-    return isActive;
+    bool is_active = regex_search(output, pattern);
+    is_active ? cout << "Container " << container_name
+                     << " is running normally..." << endl
+              : cout << container_name << " is not running..." << endl;
+
+    return is_active;
   }
 
   return false;
 }
 
+void checkContainerStatus(const string container_name)
+{
+  const string script_name = "./" + container_name + "_install.sh";
+
+  if (isContainerRunning(container_name))
+    return;
+
+  regex pattern("\\b" + container_name + "\\b");
+  const string shell_output = runScript({"docker", "image", "list"});
+  bool is_installed = regex_search(shell_output, pattern);
+
+  if (is_installed)
+  {
+    cout << "" << endl;
+  }
+  else
+  {
+
+    cout << container_name
+         << " is not installed yet!, Would you like to run it's install script?"
+            "(y/N): ";
+    char ans;
+    cin >> ans;
+    (ans == 'y') ? cout << runScript({"bash", script_name}) << endl
+                 : cout << "Closing Script..." << endl;
+  }
+}
+
 int main()
 {
+  const vector<string> container_names = {"dummy", "dummy", "dummy"};
 
-  if (!isDockerInstalled())
+  if (isDockerInstalled() == true)
+  {
+    cout << "Docker is installed! Proceeding to next check..." << endl;
+    checkContainerStatus("wordpress");
+  }
+  else
   {
     cout << "Docker is not installed!, Would you like to install docker?"
             "(y/N): ";
@@ -139,8 +177,6 @@ int main()
   }
 
   cout << "Docker is installed! Proceeding to next check..." << endl;
-
-  const vector<string> container_names = {"dummy", "dummy", "dummy"};
 
   for_each(container_names.begin(), container_names.end(), [](string container_name)
            {
@@ -160,8 +196,7 @@ int main()
                  cout << "Skipping Installation Script..." << endl;
                  exit;
                }
-             }
-           });
+             } });
 
   return 0;
 }
