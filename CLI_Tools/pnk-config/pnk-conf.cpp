@@ -124,7 +124,8 @@ bool isContainerRunning(string container_name)
 
 void checkContainerStatus(const string container_name)
 {
-  const string script_name = "./" + container_name + "_installation.sh";
+  const string dir = "/home/admin/Portable-Network-Kit-Config/Shell_Scripts/";
+  const string script_name = container_name + "_installation.sh";
   bool container_status = isContainerRunning(container_name);
 
   if (container_status)
@@ -147,7 +148,7 @@ void checkContainerStatus(const string container_name)
     if (ans == 'y')
     {
 
-      cout << runScript({"bash", "./" + container_name + "_installation.sh"}) << endl;
+      cout << runScript({"bash", dir + container_name + "_installation.sh"}) << endl;
     }
     else
     {
@@ -163,7 +164,7 @@ void checkContainerStatus(const string container_name)
 
     cout << "\nThe container for " + container_name
          << " is not running yet!, Attempting to start is up manually...\n";
-    cout << runScript({"bash", "~/Documents/Projects/Portable-Network-Kit-Config/CLI_Tools/pnk-config/test/test.sh"})
+    cout << runScript({"bash", dir + "start_container.sh", container_name})
          << endl;
   }
 
@@ -182,7 +183,7 @@ int main()
     cin >> ans;
     if (ans == 'y')
     {
-      cout << runScript({"bash", "./dummy.sh"}) << endl;
+      cout << runScript({"bash", "/home/admin/Portable-Network-Kit-Config/Shell_Scripts/docker_install.sh"}) << endl;
     }
     else
     {
