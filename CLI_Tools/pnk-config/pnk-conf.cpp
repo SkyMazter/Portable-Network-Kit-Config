@@ -47,10 +47,10 @@ string runScript(const vector<string> &args)
       output.append(buffer, count);
     }
 
-    return "Captured: \n" + output;
+    return "\nCaptured: \n" + output;
     close(pipefd[0]);
   }
-  return "There was an Error executing the command...";
+  return "\nThere was an Error executing the command...";
 }
 
 bool isDockerInstalled()
@@ -112,9 +112,9 @@ bool isContainerRunning(string container_name)
 
     regex pattern("\\b" + container_name + "\\b");
     bool is_active = regex_search(output, pattern);
-    is_active ? cout << "Container " << container_name
+    is_active ? cout << "\nContainer " << container_name
                      << " is running normally..." << endl
-              : cout << container_name << " is not running..." << endl;
+              : cout << "\nThe " + container_name << " is not running..." << endl;
 
     return is_active;
   }
@@ -128,16 +128,18 @@ void checkContainerStatus(const string container_name)
   bool container_status = isContainerRunning(container_name);
 
   if (container_status)
+  {
+    cout << "\n The " + container_name + " is running normally..." << endl;
     return;
-
+  }
   regex pattern("\\b" + container_name + "\\b");
-  const string shell_output = runScript({"docker", "image", "list"});
+  const string shell_output = runScript({"docker", "images", container_name, "--format", "{{.ID}}: {{.Repository}}"});
 
   bool is_installed = regex_search(shell_output, pattern);
 
   if (!is_installed)
   {
-    cout << container_name
+    cout << "\nThe image for " + container_name
          << " is not installed yet!, Would you like to run it's install script?"
             "(y/N): ";
     char ans;
@@ -149,22 +151,28 @@ void checkContainerStatus(const string container_name)
     }
     else
     {
-      cout << "Skipping Installation Script..." << endl;
+      cout << "\nSkipping Installation Script..." << endl;
       return;
     }
   }
 
+  cout << "\nVerifying the success of the install script..." << endl;
+  container_status = isContainerRunning(container_name);
   if (!container_status)
   {
-    cout << runScript({"pwd"})
+
+    cout << "\nThe container for " + container_name
+         << " is not running yet!, Attempting to start is up manually...\n";
+    cout << runScript({"bash", "~/Documents/Projects/Portable-Network-Kit-Config/CLI_Tools/pnk-config/test/test.sh"})
          << endl;
-    // cout << runScript({"ls"}) << endl;
   }
+
+  return;
 }
 
 int main()
 {
-  const vector<string> container_names = {"wordpress", "matrix", "dummy"};
+  const vector<string> container_names = {"wordpress", "matrix", "mariadb", "dummy"};
 
   if (!isDockerInstalled())
   {
@@ -178,14 +186,15 @@ int main()
     }
     else
     {
-      cout << "Closing Script..." << endl;
+      cout << "\nClosing Script..." << endl;
       return 0;
     }
   }
 
-  cout << "Docker is installed! Proceeding to next check..." << endl;
+  cout << "\nDocker is installed! Proceeding to next check..." << endl;
 
   for_each(container_names.begin(), container_names.end(), checkContainerStatus);
 
+  // CHECK FOR UNIFI CONTROLLER
   return 0;
 }
