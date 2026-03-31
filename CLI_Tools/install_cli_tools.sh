@@ -3,6 +3,6 @@
 echo "#####___Installing pnk-conf command___#####" \n
 sudo rm /usr/bin/local/pnk-conf
 
-g++ pnk-conif/pnk-conf.cpp -o pnk-conf
+g++ pnk-conf/pnk-conf.cpp -o pnk-conf
 
-sudo cp pnk-conf /usr/bin/local
+sudo cp pnk-conf /usr/bin/local/
