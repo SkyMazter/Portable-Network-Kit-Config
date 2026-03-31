@@ -144,6 +144,7 @@ void checkContainerStatus(const string container_name)
     cin >> ans;
     if (ans == 'y')
     {
+
       cout << runScript({"bash", "./" + container_name + "_installation.sh"}) << endl;
     }
     else
@@ -155,8 +156,7 @@ void checkContainerStatus(const string container_name)
 
   if (!container_status)
   {
-    cout << runScript({"bash"
-                       "./test/test.sh"})
+    cout << runScript({"pwd"})
          << endl;
     // cout << runScript({"ls"}) << endl;
   }
