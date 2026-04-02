@@ -114,7 +114,7 @@ bool isContainerRunning(string container_name)
 
     regex pattern("\\b" + container_name + "\\b");
     bool is_active = regex_search(output, pattern);
-    is_active ? cout << "\nContainer " << container_name
+    is_active ? cout << "\nThe container for" << container_name
                      << " is running normally..." << endl
               : cout << "\nThe " + container_name << " is not running..." << endl;
 
@@ -132,7 +132,7 @@ void checkContainerStatus(const string container_name)
 
   if (container_status)
   {
-    cout << "\n The " + container_name + " is running normally..." << endl;
+    cout << "\nThe " + container_name + " is running normally, skipping to next container..." << endl;
     return;
   }
   regex pattern("\\b" + container_name + "\\b");
@@ -175,7 +175,7 @@ void checkContainerStatus(const string container_name)
 
 int main()
 {
-  const vector<string> container_names = {"wordpress", "matrix", "mariadb", "dummy"};
+  const vector<string> container_names = {"wordpress", "matrix", "etherpad", "owncloud"};
 
   if (!isDockerInstalled())
   {
