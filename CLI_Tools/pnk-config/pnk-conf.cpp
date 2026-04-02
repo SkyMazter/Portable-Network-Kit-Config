@@ -58,7 +58,9 @@ bool isDockerInstalled()
   pid_t pid = fork();
   if (pid == 0)
   {
-    execlp("docker", "docker", "--version", NULL);
+    execlp("docker", "sudo"
+                     "docker",
+           "--version", NULL);
     _exit(127);
   }
   else
