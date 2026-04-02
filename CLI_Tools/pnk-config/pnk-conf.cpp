@@ -184,7 +184,7 @@ void checkContainerStatus(const string container_name)
     cin >> ans;
     if (ans == 'y')
     {
-      const string script_path = "./" + dir + container_name + "_installation.sh";
+      const string script_path = "." + dir + container_name + "_installation.sh";
       runScript({script_path, script_path});
     }
     else
