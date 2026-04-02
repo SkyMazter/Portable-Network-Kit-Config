@@ -136,7 +136,7 @@ void checkContainerStatus(const string container_name)
     return;
   }
   regex pattern("\\b" + container_name + "\\b");
-  const string shell_output = runScript({"sudo", "docker", "images", container_name, "--format", "{{.ID}}: {{.Repository}}"});
+  const string shell_output = runScript({"docker", "images", container_name, "--format", "{{.ID}}: {{.Repository}}"});
 
   bool is_installed = regex_search(shell_output, pattern);
 
