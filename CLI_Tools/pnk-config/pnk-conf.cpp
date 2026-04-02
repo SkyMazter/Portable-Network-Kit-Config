@@ -12,7 +12,7 @@
 
 using namespace std;
 
-string runScript(const vector<string> &args)
+string runCMD(const vector<string> &args)
 {
   int pipefd[2];
   pipe(pipefd); // pipefd[0] = read, pipefd[1] = write
@@ -51,6 +51,29 @@ string runScript(const vector<string> &args)
     close(pipefd[0]);
   }
   return "\nThere was an Error executing the command...";
+}
+
+void runScript(const vector<string> &args)
+{
+  pid_t pid = fork();
+
+  if (pid == 0)
+  {
+    std::vector<char *> cargs;
+    for (const auto &arg : args)
+    {
+      cargs.push_back(const_cast<char *>(arg.c_str()));
+    }
+    cargs.push_back(NULL);
+    execvp(cargs[0], cargs.data());
+    perror("unable to execute command");
+    _exit(127);
+  }
+  else
+  {
+    cout << "Script ran normally..." << endl;
+    return;
+  }
 }
 
 bool isDockerInstalled()
@@ -114,7 +137,7 @@ bool isContainerRunning(string container_name)
 
     regex pattern("\\b" + container_name + "\\b");
     bool is_active = regex_search(output, pattern);
-    is_active ? cout << "\nThe container for" << container_name
+    is_active ? cout << "\nThe container for " << container_name
                      << " is running normally..." << endl
               : cout << "\nThe " + container_name << " is not running..." << endl;
 
@@ -136,7 +159,7 @@ void checkContainerStatus(const string container_name)
     return;
   }
   regex pattern("\\b" + container_name + "\\b");
-  const string shell_output = runScript({"docker", "images", container_name, "--format", "{{.ID}}: {{.Repository}}"});
+  const string shell_output = runCMD({"docker", "images", container_name, "--format", "{{.ID}}: {{.Repository}}"});
 
   bool is_installed = regex_search(shell_output, pattern);
 
@@ -150,7 +173,7 @@ void checkContainerStatus(const string container_name)
     if (ans == 'y')
     {
 
-      cout << runScript({"bash", dir + container_name + "_installation.sh"}) << endl;
+      runScript({"bash", dir + container_name + "_installation.sh"});
     }
     else
     {
@@ -166,7 +189,7 @@ void checkContainerStatus(const string container_name)
 
     cout << "\nThe container for " + container_name
          << " is not running yet!, Attempting to start is up manually...\n";
-    cout << runScript({"bash", dir + "start_container.sh", container_name})
+    cout << runCMD({"bash", dir + "start_container.sh", container_name})
          << endl;
   }
 
@@ -185,7 +208,7 @@ int main()
     cin >> ans;
     if (ans == 'y')
     {
-      cout << runScript({"bash", "/home/admin/Portable-Network-Kit-Config/Shell_Scripts/docker_install.sh"}) << endl;
+      cout << runCMD({"bash", "/home/admin/Portable-Network-Kit-Config/Shell_Scripts/docker_install.sh"}) << endl;
     }
     else
     {
