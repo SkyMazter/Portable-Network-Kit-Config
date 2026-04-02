@@ -94,7 +94,7 @@ bool isContainerRunning(string container_name)
     dup2(pipefd[1], STDOUT_FILENO);
     close(pipefd[1]);
 
-    execlp("sudo", "docker", "container", "ps", "--filter", c_container_name, NULL);
+    execlp("docker", "container", "ps", "--filter", c_container_name, NULL);
 
     perror("unable to run docker command");
     _exit(127);
