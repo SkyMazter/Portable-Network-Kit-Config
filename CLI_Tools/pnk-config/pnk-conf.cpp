@@ -65,13 +65,25 @@ void runScript(const vector<string> &args)
       cargs.push_back(const_cast<char *>(arg.c_str()));
     }
     cargs.push_back(NULL);
-    execvp(cargs[0], cargs.data());
+    execv(cargs[0], cargs.data());
     perror("unable to execute command");
     _exit(127);
   }
   else
   {
-    cout << "Script ran normally..." << endl;
+    int status;
+    if (waitpid(pid, &status, 0) == -1)
+    {
+      // handle error
+    }
+    else
+    {
+      cout << "Script ran normally..." << endl;
+      cout << status << endl;
+      // child exit code in status
+      // use WIFEXITED, WEXITSTATUS, etc. on status
+    }
+
     return;
   }
 }
@@ -81,8 +93,8 @@ bool isDockerInstalled()
   pid_t pid = fork();
   if (pid == 0)
   {
-    execlp("docker", "sudo"
-                     "docker",
+    execlp("docker",
+           "docker",
            "--version", NULL);
     _exit(127);
   }
