@@ -94,7 +94,7 @@ bool isContainerRunning(string container_name)
     dup2(pipefd[1], STDOUT_FILENO);
     close(pipefd[1]);
 
-    execlp("docker", "container", "ps", "--filter", c_container_name, NULL);
+    execlp("sudo", "docker", "container", "ps", "--filter", c_container_name, NULL);
 
     perror("unable to run docker command");
     _exit(127);
@@ -136,7 +136,7 @@ void checkContainerStatus(const string container_name)
     return;
   }
   regex pattern("\\b" + container_name + "\\b");
-  const string shell_output = runScript({"docker", "images", container_name, "--format", "{{.ID}}: {{.Repository}}"});
+  const string shell_output = runScript({"sudo", "docker", "images", container_name, "--format", "{{.ID}}: {{.Repository}}"});
 
   bool is_installed = regex_search(shell_output, pattern);
 

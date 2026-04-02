@@ -27,7 +27,13 @@ sudo systemctl start docker
 
 sudo systemctl enable docker
 
-sudo usermod -aG docker admin
+sudo groupadd docker
+
+sudo usermod -aG docker $USER
+
+newgrp docker <<EONG
+  docker run hello-world
+EONG
 
 echo "Checking Docker installation..."
 
