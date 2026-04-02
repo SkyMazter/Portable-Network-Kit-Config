@@ -65,7 +65,7 @@ void runScript(const vector<string> &args)
       cargs.push_back(const_cast<char *>(arg.c_str()));
     }
     cargs.push_back(NULL);
-    execv(cargs[0], cargs.data());
+    execvp(cargs[0], cargs.data());
     perror("unable to execute command");
     _exit(127);
   }
@@ -184,8 +184,8 @@ void checkContainerStatus(const string container_name)
     cin >> ans;
     if (ans == 'y')
     {
-
-      runScript({"bash", dir + container_name + "_installation.sh"});
+      const string script_path = "./" + dir + container_name + "_installation.sh";
+      runScript({script_path, script_path});
     }
     else
     {
