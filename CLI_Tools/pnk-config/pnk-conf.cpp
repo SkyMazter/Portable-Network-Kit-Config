@@ -74,14 +74,20 @@ void runScript(const vector<string> &args)
     int status;
     if (waitpid(pid, &status, 0) == -1)
     {
-      // handle error
+      perror("fork failed");
+      return;
     }
     else
     {
-      cout << "Script ran normally..." << endl;
-      cout << status << endl;
-      // child exit code in status
-      // use WIFEXITED, WEXITSTATUS, etc. on status
+      if (WIFEXITED(status))
+      {
+        int exitCode = WEXITSTATUS(status);
+        cout << "Script exited with code: " << exitCode << endl;
+      }
+      else if (WIFSIGNALED(status))
+      {
+        cout << "Script killed by signal: " << WTERMSIG(status) << endl;
+      }
     }
 
     return;
@@ -220,7 +226,7 @@ int main()
     cin >> ans;
     if (ans == 'y')
     {
-      cout << runCMD({"bash", "/home/admin/Portable-Network-Kit-Config/Shell_Scripts/docker_install.sh"}) << endl;
+      runScript({"bash", "/home/admin/Portable-Network-Kit-Config/Shell_Scripts/docker_install.sh"});
     }
     else
     {
