@@ -18,6 +18,7 @@ echo "Creating docker-compose.yml..."
 cat <<EOF > docker-compose.yml
 services:
   db:
+    container_name: wordpress_db
     image: mariadb:latest
     restart: always
     environment:
@@ -29,6 +30,7 @@ services:
       - ./db_data:/var/lib/mysql
 
   wordpress:
+    container_name: wordpress
     image: wordpress:latest
     restart: always
     ports:
@@ -69,5 +71,3 @@ else
     cat "$SOURCE" >> "$DEST"
     echo "Master .env file created..."
 fi
-
-

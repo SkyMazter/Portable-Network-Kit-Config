@@ -1,6 +1,10 @@
 #!/usr/bin/bash
 
-echo "#####___Installing pnk-conf command___#####"
+echo "#####___Installing pnk-conf dependancies___#####"
+
+sudo apt-get figlet
+
+echo "#####___Compiling pnk-conf command___#####"
 
 g++ pnk-config/pnk-conf.cpp -o pnk-config/pnk-conf
 

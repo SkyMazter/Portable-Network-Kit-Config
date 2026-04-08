@@ -22,7 +22,7 @@ echo "Creating docker-compose.yml..."
 cat <<EOF > docker-compose.yml
 services:
   synapse:
-    container_name: synapse
+    container_name: matrix-synapse-server
     build:
       context: ../..
       dockerfile: docker/Dockerfile
@@ -39,7 +39,7 @@ services:
       - 8008:8008
 
   postgres-db:
-    container_name: postgres-db
+    container_name: matrix-db
     image: docker.io/postgres:15-alpine
     environment:
       - POSTGRES_USER=\${POSTGRES_USER}
@@ -48,7 +48,7 @@ services:
     volumes:
       - ./schemas:/var/lib/postgresql/data
   cinny:
-    container_name: cinny
+    container_name: matrix-front-end
     image: ajbura/cinny:latest
     ports:
       - 9002:80
