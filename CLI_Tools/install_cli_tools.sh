@@ -2,7 +2,7 @@
 
 echo "#####___Installing pnk-conf dependancies___#####"
 
-sudo apt-get figlet
+sudo apt-get install figlet
 
 echo "#####___Compiling pnk-conf command___#####"
 
