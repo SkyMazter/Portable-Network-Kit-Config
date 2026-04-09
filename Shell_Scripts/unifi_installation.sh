@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 echo "Installing Podman"
-sudo apt install podman -y
+sudo apt-get install podman -y
 
 INSTALL_FILE="df5b-linux-arm64-5.0.6-f35e944c-f4b6-4190-93a8-be61b96c58f4.6-arm64"
 DOWNLOAD_URL="https://fw-download.ubnt.com/data/unifi-os-server/$INSTALL_FILE"

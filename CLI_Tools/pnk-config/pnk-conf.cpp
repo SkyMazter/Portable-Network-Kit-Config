@@ -41,7 +41,7 @@ string runCMD(const vector<string> &args) {
       output.append(buffer, count);
     }
 
-    return "\nCaptured: \n" + output;
+    return "\n#####_______________________________##### \n" + output;
     close(pipefd[0]);
   }
   return "\nThere was an Error executing the command...";
