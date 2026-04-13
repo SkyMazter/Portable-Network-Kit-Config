@@ -199,6 +199,7 @@ int main() {
       cout << "Please restart you system to allow for docker to run "
               "normally...\nUse (sudo reboot now) to do so."
            << endl;
+      return 0;
     } else {
       cout << "\nClosing Script..." << endl;
       return 0;
