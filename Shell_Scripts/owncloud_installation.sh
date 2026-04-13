@@ -10,7 +10,7 @@ cd owncloud
 
 echo "Creating .env file..."
 cat <<EOF > .env
-OWNCLOUD_VERSION=10.16
+OWNCLOUD_VERSION=10.16.1
 OWNCLOUD_DOMAIN=localhost:8080
 OWNCLOUD_TRUSTED_DOMAINS=localhost, pnkv4, pnkv4.local
 ADMIN_USERNAME=admin
