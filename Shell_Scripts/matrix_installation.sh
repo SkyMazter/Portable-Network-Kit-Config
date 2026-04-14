@@ -86,9 +86,12 @@ echo ""
 docker compose run --rm -e SYNAPSE_SERVER_NAME=$SERVER_NAME synapse generate
 
 # Modify config
-cat <<EOF | sudo tee -a homeserver.yaml > /dev/null
+cat <<EOF | sudo tee -a files/homeserver.yaml > /dev/null
 enable_registration: true
 enable_registration_without_verification: true
+room_list_publication_rules:
+    - user_id: "@admin:PNK"
+      action: "allow"
 EOF
 
 # Start server
