@@ -1,14 +1,15 @@
 #!/usr/bin/bash
 
-echo "#####___Installing pnk-conf dependancies___#####"
-
+echo "#####___Installing pnk-config dependancies___#####"
+echo ""
 sudo apt-get install figlet
 
-echo "#####___Compiling pnk-conf command___#####"
+echo "#####___Compiling pnk-config command___#####"
+echo ""
+g++ pnk-config/pnk-config.cpp -o pnk-config/pnk-config
 
-g++ pnk-config/pnk-conf.cpp -o pnk-config/pnk-conf
-
-sudo cp pnk-config/pnk-conf /usr/local/bin/
+sudo cp pnk-config/pnk-config /usr/local/bin/
 
 echo "#####___Install Complete___#####"
-echo "--> Try running 'pnk-conf' to verify"
+echo ""
+echo "--> Try running 'pnk-config' to verify"
