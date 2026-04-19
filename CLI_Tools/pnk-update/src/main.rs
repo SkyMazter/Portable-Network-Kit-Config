@@ -28,13 +28,13 @@ fn check_for_service(service_name: &str) -> bool {
                 .expect("Failed to wait for child process");
             if output.status.success() && !output.stdout.is_empty() {
                 println!(
-                    "{} is installed. Exited with code {}",
+                    ">> {} is installed. Exited with code {} \n",
                     service_name, output.status
                 );
                 return true;
             } else {
                 println!(
-                    "{} is not installed. Exited with code {}",
+                    ">> {} is not installed. Exited with code {} \n",
                     service_name, output.status
                 );
                 return false;
@@ -58,13 +58,16 @@ fn pull_git_changes(dir: &str) {
         .spawn()
     {
         Ok(child_process) => {
-            let output = child_process.wait_with_output().expect("msg");
+            let output = child_process
+                .wait_with_output()
+                .expect("Unable to retrieve output.");
             match output.status.code().unwrap() {
-                0 => println!("Succesfully pulled code from git repository"),
-                1 => println!(
-                    "Unable to pull code due to local changes made to the repository, please undo any changes made to the code."
+                0 => println!(">> Succesfully pulled code from git repository\n"),
+                1 => println!(">> Unable to pull code due to error noted above.\n"),
+                _ => println!(
+                    ">> Error, Exited with code: {} \n",
+                    output.status.code().unwrap()
                 ),
-                _ => println!("Error, Exited with code: {}", output.status.code().unwrap()),
             }
         }
         Err(e) => {
@@ -85,16 +88,17 @@ fn main() {
     // add it to the /usr/local/bin/ directory
     let timeout_ms = 5000;
 
-    if check_internet_conenction(timeout_ms) {
-        println!("There is internet!");
-    } else {
-        println!("Unable to connect to the internet!");
+    if !check_internet_conenction(timeout_ms) {
+        println!(">> Unable to connect to the internet! \n");
+        return;
+    }
+    println!(">> There is internet! \n");
+
+    if !check_for_service("git") {
+        println!(">> Unable to continue update, missing dependancy: Git");
+        return;
     }
 
-    // if check_for_service("git") {
-
-    // }
-    //
     let dir = "/Users/oscar/Documents/CodingProjects/Projects/Portable-Network-Kit-Config/";
     pull_git_changes(dir);
 }
