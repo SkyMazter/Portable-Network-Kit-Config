@@ -11,7 +11,7 @@ fn check_internet_conenction(timeout_ms: u32) -> bool {
     }
 }
 
-fn check_for_service(service_name: &str) {
+fn check_for_service(service_name: &str) -> bool {
     match Command::new("sh")
         .arg("-c")
         .arg(format!(
@@ -25,15 +25,51 @@ fn check_for_service(service_name: &str) {
         Ok(child_process) => {
             let output = child_process
                 .wait_with_output()
-                .expect("Failed to wait fro child process");
+                .expect("Failed to wait for child process");
             if output.status.success() && !output.stdout.is_empty() {
-                println!("{} is installed.", service_name);
+                println!(
+                    "{} is installed. Exited with code {}",
+                    service_name, output.status
+                );
+                return true;
             } else {
-                println!("{} is not installed.", service_name);
+                println!(
+                    "{} is not installed. Exited with code {}",
+                    service_name, output.status
+                );
+                return false;
             }
         }
 
-        Err(e) => eprintln!("Failed to run command: {}", e),
+        Err(e) => {
+            eprintln!("Failed to run command: {}", e);
+            return false;
+        }
+    }
+}
+
+fn pull_git_changes(dir: &str) {
+    match Command::new("git")
+        .arg("-C")
+        .arg(dir)
+        .arg("pull")
+        .stdout(Stdio::piped())
+        .stderr(Stdio::inherit())
+        .spawn()
+    {
+        Ok(child_process) => {
+            let output = child_process.wait_with_output().expect("msg");
+            match output.status.code().unwrap() {
+                0 => println!("Succesfully pulled code from git repository"),
+                1 => println!(
+                    "Unable to pull code due to local changes made to the repository, please undo any changes made to the code."
+                ),
+                _ => println!("Error, Exited with code: {}", output.status.code().unwrap()),
+            }
+        }
+        Err(e) => {
+            eprintln!("Failed to run command: {}", e);
+        }
     }
 }
 
@@ -55,5 +91,10 @@ fn main() {
         println!("Unable to connect to the internet!");
     }
 
-    check_for_service("docker.service");
+    // if check_for_service("git") {
+
+    // }
+    //
+    let dir = "/Users/oscar/Documents/CodingProjects/Projects/Portable-Network-Kit-Config/";
+    pull_git_changes(dir);
 }
