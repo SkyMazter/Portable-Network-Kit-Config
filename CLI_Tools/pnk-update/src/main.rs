@@ -76,6 +76,28 @@ fn pull_git_changes(dir: &str) {
     }
 }
 
+fn install_cargo_script(dir: &str) {
+    match Command::new("cargo")
+        .arg("install")
+        .arg("--path")
+        .arg(dir)
+        .stdout(Stdio::piped())
+        .stderr(Stdio::inherit())
+        .spawn()
+    {
+        Ok(child_process) => {
+            let output = child_process
+                .wait_with_output()
+                .expect("Unable to retrieve output.");
+            match output.status.success() {
+                true => println!(">> Succesfully installed script\n"),
+                false => return,
+            }
+        }
+        Err(_) => {}
+    }
+}
+
 fn main() {
     // check for dependancies
     // return if not installed
