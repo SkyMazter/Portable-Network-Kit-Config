@@ -1,5 +1,5 @@
 use std::net::{SocketAddr, TcpStream};
-use std::process::{Command, Stdio};
+use std::process::{Command, Stdio, exit};
 use std::time::Duration;
 
 fn check_internet_conenction(timeout_ms: u32) -> bool {
@@ -14,12 +14,9 @@ fn check_internet_conenction(timeout_ms: u32) -> bool {
 fn check_for_service(service_name: &str) -> bool {
     match Command::new("sh")
         .arg("-c")
-        .arg(format!(
-            "systemctl list list-unit-files --type=service | grep {}",
-            service_name
-        ))
+        .arg(format!("dpkg -l {}", service_name))
         .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
+        .stderr(Stdio::inherit())
         .spawn()
     {
         Ok(child_process) => {
@@ -64,14 +61,18 @@ fn pull_git_changes(dir: &str) {
             match output.status.code().unwrap() {
                 0 => println!(">> Succesfully pulled code from git repository\n"),
                 1 => println!(">> Unable to pull code due to error noted above.\n"),
-                _ => println!(
-                    ">> Error, Exited with code: {} \n",
-                    output.status.code().unwrap()
-                ),
+                _ => {
+                    println!(
+                        ">> Error, Exited with code: {} \n",
+                        output.status.code().unwrap()
+                    );
+                    exit(output.status.code().unwrap());
+                }
             }
         }
         Err(e) => {
             eprintln!("Failed to run command: {}", e);
+            exit(1);
         }
     }
 }
@@ -91,10 +92,13 @@ fn install_cargo_script(dir: &str) {
                 .expect("Unable to retrieve output.");
             match output.status.success() {
                 true => println!(">> Succesfully installed script\n"),
-                false => return,
+                false => exit(output.status.code().unwrap()),
             }
         }
-        Err(_) => {}
+        Err(e) => {
+            println!("Error: {}", e);
+            exit(1);
+        }
     }
 }
 
