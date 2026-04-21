@@ -99,15 +99,6 @@ fn install_cargo_script(dir: &str) {
 }
 
 fn main() {
-    // check for dependancies
-    // return if not installed
-    //
-    // check for internet connection
-    //
-    // check for connection to github repo
-    // run git pull
-    // compile the new versions of the cli commands
-    // add it to the /usr/local/bin/ directory
     let timeout_ms = 5000;
 
     if !check_internet_conenction(timeout_ms) {
@@ -121,6 +112,11 @@ fn main() {
         return;
     }
 
-    let dir = "/Users/oscar/Documents/CodingProjects/Projects/Portable-Network-Kit-Config/";
+    let mut dir = "/home/admin/Portable-Network-Kit-Config/";
     pull_git_changes(dir);
+
+    dir = "/home/admin/Portable-Network-Kit-Config/CLI_Tools/pnk-update/";
+    install_cargo_script(dir);
+
+    println!(">> Update Complete!\n")
 }
