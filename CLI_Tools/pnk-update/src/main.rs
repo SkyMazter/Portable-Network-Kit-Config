@@ -1,6 +1,16 @@
+use clap::Parser;
 use std::net::{SocketAddr, TcpStream};
 use std::process::{Command, Stdio, exit};
 use std::time::Duration;
+
+#[derive(Parser)]
+#[command(name = "pnk-update")]
+#[command(version = "1.0")]
+#[command(about = "Updates the PNK CLI suite via the GitHub Repository", long_about = None)]
+struct Cli {
+    #[arg(short, long, default_value_t = 5000)]
+    timeout: u32,
+}
 
 fn check_internet_conenction(timeout_ms: u32) -> bool {
     let addr = SocketAddr::from(([140, 82, 112, 4], 80));
@@ -103,7 +113,12 @@ fn install_cargo_script(dir: &str) {
 }
 
 fn main() {
-    let timeout_ms = 5000;
+    let cli = Cli::parse();
+    println!(
+        ">> Running internet check with {:?}ms timeout...\n",
+        cli.timeout
+    );
+    let timeout_ms = cli.timeout;
 
     if !check_internet_conenction(timeout_ms) {
         println!(">> Unable to connect to the internet! \n");
