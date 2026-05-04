@@ -135,10 +135,7 @@ fn main() {
             eprintln!("{}", e);
             if prompt_yes_no("Would you like to run the docker install script?").unwrap() {
                 match run_command("bash", Some(&vec![script_location.as_str()])) {
-                    Ok(output) => {
-                        // script_location = String::from_utf8_lossy(&output.stdout).to_string();
-                        // println!(">>> {}", script_location);
-                    }
+                    Ok(_) => println!(">>> Docker is succesfully installed..."),
                     Err(e) => {
                         eprintln!("{}", e);
                         eprintln!(
