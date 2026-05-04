@@ -122,7 +122,7 @@ fn main() {
             exit(1)
         }
     }
-
+    println!("...{}...", script_location);
     args = vec!["docker"];
     match run_command("which", Some(&args)) {
         Ok(output) => {
