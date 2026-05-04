@@ -111,7 +111,7 @@ fn main() {
     args = vec![&path, "-name", "docker_install.sh"];
     match run_command("find", Some(&args)) {
         Ok(output) => {
-            script_location = String::from_utf8_lossy(&output.stdout).to_string();
+            script_location = String::from_utf8_lossy(&output.stdout).trim().to_string();
             println!(">>> {}", script_location);
         }
         Err(e) => {
@@ -122,7 +122,7 @@ fn main() {
             exit(1)
         }
     }
-    println!("...{}...", script_location);
+
     args = vec!["docker"];
     match run_command("which", Some(&args)) {
         Ok(output) => {
