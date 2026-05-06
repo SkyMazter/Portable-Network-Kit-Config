@@ -96,13 +96,62 @@ fn prompt_yes_no(prompt: &str) -> Option<bool> {
     }
 }
 
+fn install_docker_container(service: &str) -> bool {
+    let file_name: String = format!("{}_install.sh", service);
+    let path: String = get_file_location(file_name.as_str().trim());
+    match run_bash_script(path.as_str()) {
+        Ok(_) => {
+            return true;
+        }
+        Err(e) => {
+            eprintln!("{}", e);
+            return false;
+        }
+    }
+}
+
+fn get_file_location(file_name: &str) -> String {
+    let username: String;
+    match run_command("whoami", None) {
+        Ok(output) => {
+            username = String::from_utf8_lossy(&output.stdout).to_string();
+        }
+        Err(e) => {
+            eprintln!("{}", e);
+            exit(1);
+        }
+    }
+
+    let home_path: String = format!("/home/{}", username.trim());
+
+    let script_location: String;
+
+    match run_command("find", Some(&vec![home_path.as_str(), "-name", file_name])) {
+        Ok(output) => {
+            script_location = String::from_utf8_lossy(&output.stdout).trim().to_string();
+        }
+        Err(e) => {
+            eprintln!("{}", e);
+            eprintln!(
+                ">>> Unable to locate the nessecary install scripts, please ensure they are downloaded onto your machine..."
+            );
+            exit(1)
+        }
+    }
+
+    return script_location;
+}
+
 fn main() {
     let cli: Cli = Cli::parse();
     let cmd: &str = "figlet";
-    let mut args: Vec<&str> = vec!["PNK Configuration", "-f", "mini"];
+    let args: Vec<&str> = vec!["PNK Configuration", "-f", "mini"];
 
     match run_command(cmd, Some(&args)) {
-        Ok(_) => {}
+        Ok(output) => {
+            let msg: String = String::from_utf8_lossy(&output.stdout).to_string();
+            println!("{}", msg)
+        }
         Err(e) => {
             eprintln!("{}", e)
         }
@@ -116,37 +165,37 @@ fn main() {
         true => println!(">>> Internet connection found...\n"),
         false => return,
     }
-    let username: String;
-    match run_command("whoami", None) {
-        Ok(output) => {
-            username = String::from_utf8_lossy(&output.stdout).to_string();
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-            exit(1);
-        }
-    }
+    // let username: String;
+    // match run_command("whoami", None) {
+    //     Ok(output) => {
+    //         username = String::from_utf8_lossy(&output.stdout).to_string();
+    //     }
+    //     Err(e) => {
+    //         eprintln!("{}", e);
+    //         exit(1);
+    //     }
+    // }
 
-    let path: String = format!("/home/{}", username.trim());
+    // let path: String = format!("/home/{}", username.trim());
 
-    let script_location: String;
-    args = vec![&path, "-name", "docker_install.sh"];
-    match run_command("find", Some(&args)) {
-        Ok(output) => {
-            script_location = String::from_utf8_lossy(&output.stdout).trim().to_string();
-            println!(">>> {}", script_location);
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-            eprintln!(
-                ">>> Unable to locate the nessecary install scripts, please ensure they are downloaded onto your machine..."
-            );
-            exit(1)
-        }
-    }
+    // let script_location: String;
+    // args = vec![&path, "-name", "docker_install.sh"];
+    // match run_command("find", Some(&args)) {
+    //     Ok(output) => {
+    //         script_location = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    //     }
+    //     Err(e) => {
+    //         eprintln!("{}", e);
+    //         eprintln!(
+    //             ">>> Unable to locate the nessecary install scripts, please ensure they are downloaded onto your machine..."
+    //         );
+    //         exit(1)
+    //     }
+    // }
+    //
+    let script_location = get_file_location("docker_install.sh");
 
-    args = vec!["docker"];
-    match run_command("which", Some(&args)) {
+    match run_command("which", Some(&vec!["docker"])) {
         Ok(output) => {
             if output.status.success() {
                 println!(">>> Docker is installed, proceeding with the install")
@@ -157,7 +206,7 @@ fn main() {
             eprintln!("{}", e);
             if prompt_yes_no("Would you like to run the docker install script?").unwrap() {
                 match run_bash_script(script_location.as_str()) {
-                    Ok(_) => println!(">>> Docker is succesfully installed..."),
+                    Ok(_) => println!("\n>>> Docker is succesfully installed..."),
                     Err(e) => {
                         eprintln!("{}", e);
                         eprintln!(
@@ -167,11 +216,20 @@ fn main() {
                     }
                 }
             } else {
+                eprintln!(
+                    ">>> Docker is required for the PNK to run is applications, closing script..."
+                );
                 exit(1)
             }
         }
     }
 
+    let docker_services: Vec<&str> = vec!["wordpress", "matrix", "owncloud", "etherpad"];
+    for service in docker_services {
+        if install_docker_container(service) {
+        } else {
+        }
+    }
     //Run Figlet
     //Check for internet connection
     //Check for bash scripts
