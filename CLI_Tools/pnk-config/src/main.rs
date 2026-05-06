@@ -1,7 +1,6 @@
 use clap::Parser;
 use std::io::{self, Error, ErrorKind, Write};
 use std::net::{SocketAddr, TcpStream};
-use std::path;
 use std::process::{Command, ExitStatus, Output, Stdio, exit};
 use std::time::Duration;
 
