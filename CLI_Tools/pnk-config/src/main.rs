@@ -1,7 +1,7 @@
 use clap::Parser;
 use std::io::{self, Error, ErrorKind, Write};
 use std::net::{SocketAddr, TcpStream};
-use std::process::{Command, Output, exit};
+use std::process::{Command, ExitStatus, Output, Stdio, exit};
 use std::time::Duration;
 
 #[derive(Parser)]
@@ -19,7 +19,7 @@ fn check_internet_connection(timeout_ms: u32) -> bool {
     }
 }
 
-fn run_command(cmd: &str, args: Option<&[&str]>) -> Result<Output, std::io::Error> {
+fn run_command(cmd: &str, args: Option<&[&str]>) -> Result<Output, Error> {
     let mut command = Command::new(cmd);
 
     match args {
@@ -42,6 +42,28 @@ fn run_command(cmd: &str, args: Option<&[&str]>) -> Result<Output, std::io::Erro
                 ">>> Command failed with status: {}. Stderr: {}",
                 output.status,
                 String::from_utf8_lossy(&output.stderr)
+            ),
+        );
+        return Err(error_msg);
+    }
+}
+
+fn run_bash_script(path: &str) -> Result<ExitStatus, Error> {
+    let script = Command::new("bash")
+        .arg(path)
+        .stdout(Stdio::inherit())
+        .output()?;
+    let output = script.status.success();
+
+    if output {
+        Ok(script.status)
+    } else {
+        let error_msg: Error = Error::new(
+            ErrorKind::Other,
+            format!(
+                ">>> Command failed with status: {}. Stderr: {}",
+                script.status,
+                String::from_utf8_lossy(&script.stderr)
             ),
         );
         return Err(error_msg);
@@ -134,7 +156,7 @@ fn main() {
         Err(e) => {
             eprintln!("{}", e);
             if prompt_yes_no("Would you like to run the docker install script?").unwrap() {
-                match run_command("bash", Some(&vec![script_location.as_str()])) {
+                match run_bash_script(script_location.as_str()) {
                     Ok(_) => println!(">>> Docker is succesfully installed..."),
                     Err(e) => {
                         eprintln!("{}", e);

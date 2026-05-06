@@ -29,7 +29,8 @@ sudo systemctl enable docker
 
 sudo groupadd docker
 
-sudo usermod -aG docker $USER
+LOCAL_USER=$(whoami)
+sudo usermod -aG docker "$LOCAL_USER"
 
 newgrp docker <<EONG
   docker run hello-world
