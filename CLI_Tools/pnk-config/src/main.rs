@@ -49,9 +49,9 @@ fn run_command(cmd: &str, args: Option<&[&str]>) -> Result<Output, Error> {
 }
 
 fn run_bash_script(path: &str) -> Result<ExitStatus, Error> {
-    let script = Command::new("sh")
-        .arg("-c")
-        .arg("bash")
+    let script = Command::new("bash")
+        // .arg("-c")
+        // .arg("bash")
         .arg(path)
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
