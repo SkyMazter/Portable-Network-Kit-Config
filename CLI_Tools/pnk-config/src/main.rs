@@ -165,34 +165,7 @@ fn main() {
         true => println!(">>> Internet connection found...\n"),
         false => return,
     }
-    // let username: String;
-    // match run_command("whoami", None) {
-    //     Ok(output) => {
-    //         username = String::from_utf8_lossy(&output.stdout).to_string();
-    //     }
-    //     Err(e) => {
-    //         eprintln!("{}", e);
-    //         exit(1);
-    //     }
-    // }
 
-    // let path: String = format!("/home/{}", username.trim());
-
-    // let script_location: String;
-    // args = vec![&path, "-name", "docker_install.sh"];
-    // match run_command("find", Some(&args)) {
-    //     Ok(output) => {
-    //         script_location = String::from_utf8_lossy(&output.stdout).trim().to_string();
-    //     }
-    //     Err(e) => {
-    //         eprintln!("{}", e);
-    //         eprintln!(
-    //             ">>> Unable to locate the nessecary install scripts, please ensure they are downloaded onto your machine..."
-    //         );
-    //         exit(1)
-    //     }
-    // }
-    //
     let script_location = get_file_location("docker_install.sh");
 
     match run_command("which", Some(&vec!["docker"])) {
