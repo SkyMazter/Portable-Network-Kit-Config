@@ -56,9 +56,9 @@ EOF
 
 echo "docker-compose.yml created."
 
-# Create required folders
-mkdir -p files
-mkdir -p schemas
+# # Create required folders
+# mkdir -p files
+# mkdir -p schemas
 
 # Ask for server name
 read -p "Enter your Matrix server name (example: matrix.example.com): " SERVER_NAME
