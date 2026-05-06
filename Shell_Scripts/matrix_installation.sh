@@ -56,17 +56,17 @@ EOF
 
 echo "docker-compose.yml created."
 
-# # Create required folders
-# mkdir -p files
-# mkdir -p schemas
+# Create required folders
+mkdir -p files
+mkdir -p schemas
 
 # Ask for server name
-read -p "Enter your Matrix server name (example: matrix.example.com): " SERVER_NAME
+# read -p "Enter your Matrix server name (example: matrix.example.com): " SERVER_NAME
 
 echo "Generating Matrix configuration..."
 
 sudo docker compose run --rm \
-  -e SYNAPSE_SERVER_NAME="$SERVER_NAME" \
+  -e SYNAPSE_SERVER_NAME="pnk" \
   -e SYNAPSE_REPORT_STATS=yes \
   synapse generate
 
