@@ -136,6 +136,9 @@ fn main() {
 
     dir = "/home/admin/Portable-Network-Kit-Config/CLI_Tools/pnk-update/";
     install_cargo_script(dir);
-
+    println!(">> pnk-config has been recompiled...\n");
+    dir = "/home/admin/Portable-Network-Kit-Config/CLI_Tools/pnk-config/";
+    install_cargo_script(dir);
+    println!(">> pnk-config has been recompiled...\n");
     println!(">> Update Complete!\n")
 }
