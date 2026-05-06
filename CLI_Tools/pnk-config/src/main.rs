@@ -199,10 +199,7 @@ fn main() {
 
     let docker_services: Vec<&str> = vec!["wordpress", "matrix", "owncloud", "etherpad"];
     for service in docker_services {
-        if install_docker_container(
-            service,
-            format!("{}/Portable-Network-Kit-Config", home_path).trim(),
-        ) {
+        if install_docker_container(service, home_path.as_str()) {
         } else {
         }
     }
