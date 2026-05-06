@@ -96,20 +96,6 @@ fn prompt_yes_no(prompt: &str) -> Option<bool> {
     }
 }
 
-fn install_docker_container(service: &str) -> bool {
-    let file_name: String = format!("{}_install.sh", service);
-    let path: String = get_file_location(file_name.as_str().trim());
-    match run_bash_script(path.as_str()) {
-        Ok(_) => {
-            return true;
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-            return false;
-        }
-    }
-}
-
 fn get_file_location(file_name: &str) -> String {
     let username: String;
     match run_command("whoami", None) {
@@ -140,6 +126,20 @@ fn get_file_location(file_name: &str) -> String {
     }
 
     return script_location;
+}
+
+fn install_docker_container(service: &str) -> bool {
+    let file_name: String = format!("{}_installation.sh", service);
+    let path: String = get_file_location(file_name.as_str().trim());
+    match run_bash_script(path.as_str()) {
+        Ok(_) => {
+            return true;
+        }
+        Err(e) => {
+            eprintln!("{}", e);
+            return false;
+        }
+    }
 }
 
 fn main() {
