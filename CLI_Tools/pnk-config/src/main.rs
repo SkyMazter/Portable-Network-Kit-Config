@@ -164,7 +164,7 @@ fn main() {
         }
     }
 
-    let home_path: String = format!("/home/{}", username.trim());
+    let home_path: String = format!("/home/{}/Portable-Network-Kit-Config", username.trim());
 
     let script_location = get_file_location("docker_install.sh", home_path.as_str());
 
