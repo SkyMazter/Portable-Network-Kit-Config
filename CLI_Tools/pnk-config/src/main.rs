@@ -1,6 +1,7 @@
 use clap::Parser;
 use std::io::{self, Error, ErrorKind, Write};
 use std::net::{SocketAddr, TcpStream};
+use std::path;
 use std::process::{Command, ExitStatus, Output, Stdio, exit};
 use std::time::Duration;
 
@@ -96,23 +97,10 @@ fn prompt_yes_no(prompt: &str) -> Option<bool> {
     }
 }
 
-fn get_file_location(file_name: &str) -> String {
-    let username: String;
-    match run_command("whoami", None) {
-        Ok(output) => {
-            username = String::from_utf8_lossy(&output.stdout).to_string();
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-            exit(1);
-        }
-    }
-
-    let home_path: String = format!("/home/{}", username.trim());
-
+fn get_file_location(file_name: &str, home_path: &str) -> String {
     let script_location: String;
 
-    match run_command("find", Some(&vec![home_path.as_str(), "-name", file_name])) {
+    match run_command("find", Some(&vec![home_path, "-name", file_name])) {
         Ok(output) => {
             script_location = String::from_utf8_lossy(&output.stdout).trim().to_string();
         }
@@ -128,9 +116,9 @@ fn get_file_location(file_name: &str) -> String {
     return script_location;
 }
 
-fn install_docker_container(service: &str) -> bool {
+fn install_docker_container(service: &str, path: &str) -> bool {
     let file_name: String = format!("{}_installation.sh", service);
-    let path: String = get_file_location(file_name.as_str().trim());
+    let path: String = get_file_location(file_name.as_str().trim(), path);
     match run_bash_script(path.as_str()) {
         Ok(_) => {
             return true;
@@ -166,7 +154,20 @@ fn main() {
         false => return,
     }
 
-    let script_location = get_file_location("docker_install.sh");
+    let username: String;
+    match run_command("whoami", None) {
+        Ok(output) => {
+            username = String::from_utf8_lossy(&output.stdout).to_string();
+        }
+        Err(e) => {
+            eprintln!("{}", e);
+            exit(1);
+        }
+    }
+
+    let home_path: String = format!("/home/{}", username.trim());
+
+    let script_location = get_file_location("docker_install.sh", home_path.as_str());
 
     match run_command("which", Some(&vec!["docker"])) {
         Ok(output) => {
@@ -199,7 +200,10 @@ fn main() {
 
     let docker_services: Vec<&str> = vec!["wordpress", "matrix", "owncloud", "etherpad"];
     for service in docker_services {
-        if install_docker_container(service) {
+        if install_docker_container(
+            service,
+            format!("{}/Portable-Network-Kit-Config", home_path).trim(),
+        ) {
         } else {
         }
     }
