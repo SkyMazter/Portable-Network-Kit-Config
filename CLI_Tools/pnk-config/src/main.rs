@@ -54,6 +54,7 @@ fn run_bash_script(path: &str) -> Result<ExitStatus, Error> {
         .arg("bash")
         .arg(path)
         .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
         .output()?;
     let output = script.status.success();
 
