@@ -21,4 +21,5 @@ cargo install --path "$INSTALL_PATH"
 
 echo "#####___Install Complete___#####"
 echo ""
+exec $SHELL
 echo "--> Try running 'pnk-config' to verify"

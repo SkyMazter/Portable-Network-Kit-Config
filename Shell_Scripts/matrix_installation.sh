@@ -83,7 +83,7 @@ echo ""
 echo "docker exec -it synapse register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml"
 echo ""
 
-docker compose run --rm -e SYNAPSE_SERVER_NAME=$SERVER_NAME synapse generate
+# docker compose run --rm -e SYNAPSE_SERVER_NAME="PNK" synapse generate
 
 # Modify config
 cat <<EOF | sudo tee -a files/homeserver.yaml > /dev/null

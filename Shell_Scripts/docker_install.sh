@@ -49,11 +49,11 @@ fi
 echo "Docker is installed."
 
 # Check if Docker daemon is running
-if docker info > /dev/null 2>&1
-then
-    echo "Docker is running."
-else
-    echo "Docker is installed but NOT running."
-    echo "Try starting it with:"
-    echo "sudo systemctl start docker"
-fi
+# if docker info > /dev/null 2>&1
+# then
+#     echo "Docker is running."
+# else
+#     echo "Docker is installed but NOT running."
+#     echo "Try starting it with:"
+#     echo "sudo systemctl start docker"
+# fi
