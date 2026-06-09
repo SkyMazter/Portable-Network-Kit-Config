@@ -83,10 +83,9 @@ echo ""
 echo "docker exec -it synapse register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml"
 echo ""
 
-# docker compose run --rm -e SYNAPSE_SERVER_NAME="PNK" synapse generate
-
 # Modify config
 cat <<EOF | sudo tee -a files/homeserver.yaml > /dev/null
+###
 enable_registration: true
 enable_registration_without_verification: true
 room_list_publication_rules:
@@ -101,9 +100,8 @@ echo "Cinny setup complete."
 echo "Create your admin user"
 
 
-newgrp docker <<EONG
-    docker exec -it matrix-synapse-server register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml -u admin -p m@trix@PNK! -a
-EONG
+
+docker exec -it matrix-synapse-server register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml -u admin -p m@trix@PNK! -a
 
 
 echo "Updating the master .env records..."
