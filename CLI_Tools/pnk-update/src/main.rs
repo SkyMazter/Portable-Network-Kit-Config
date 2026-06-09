@@ -1,6 +1,8 @@
 use clap::Parser;
+use std::io::{Error, ErrorKind};
 use std::net::{SocketAddr, TcpStream};
-use std::process::{Command, Stdio, exit};
+use std::process::{Command, Output, Stdio, exit};
+
 use std::time::Duration;
 
 #[derive(Parser)]
@@ -112,6 +114,35 @@ fn install_cargo_script(dir: &str) {
     }
 }
 
+fn run_command(cmd: &str, args: Option<&[&str]>) -> Result<Output, Error> {
+    let mut command = Command::new(cmd);
+
+    match args {
+        Some(args) => {
+            for arg in args {
+                command.arg(arg);
+            }
+        }
+        None => {}
+    }
+
+    let output = command.output()?;
+
+    if output.status.success() {
+        return Ok(output);
+    } else {
+        let error_msg: Error = Error::new(
+            ErrorKind::Other,
+            format!(
+                ">>> Command failed with status: {}. Stderr: {}",
+                output.status,
+                String::from_utf8_lossy(&output.stderr)
+            ),
+        );
+        return Err(error_msg);
+    }
+}
+
 fn main() {
     let cli = Cli::parse();
     println!(
@@ -124,6 +155,18 @@ fn main() {
         println!(">> Unable to connect to the internet! \n");
         return;
     }
+
+    let username: String;
+    match run_command("whoami", None) {
+        Ok(output) => {
+            username = String::from_utf8_lossy(&output.stdout).to_string();
+        }
+        Err(e) => {
+            eprintln!("{}", e);
+            exit(1);
+        }
+    }
+
     println!(">> There is internet! \n");
 
     if !check_for_service("git") {
@@ -131,14 +174,21 @@ fn main() {
         return;
     }
 
-    let mut dir = "/home/admin/Portable-Network-Kit-Config/";
-    pull_git_changes(dir);
+    let mut dir: String = format!("/home/{}/Portable-Network-Kit-Config", username.trim());
 
-    dir = "/home/admin/Portable-Network-Kit-Config/CLI_Tools/pnk-update/";
-    install_cargo_script(dir);
+    pull_git_changes(&dir);
+
+    dir = format!(
+        "/home/{}/Portable-Network-Kit-Config/CLI_Tools/pnk-update/",
+        username.trim()
+    );
+    install_cargo_script(&dir);
     println!(">> pnk-config has been recompiled...\n");
-    dir = "/home/admin/Portable-Network-Kit-Config/CLI_Tools/pnk-config/";
-    install_cargo_script(dir);
+    dir = format!(
+        "/home/{}/Portable-Network-Kit-Config/CLI_Tools/pnk-config/",
+        username.trim()
+    );
+    install_cargo_script(&dir);
     println!(">> pnk-config has been recompiled...\n");
     println!(">> Update Complete!\n")
 }
