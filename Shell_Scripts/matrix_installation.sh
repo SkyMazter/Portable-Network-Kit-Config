@@ -101,7 +101,7 @@ echo "Create your admin user"
 
 
 
-docker exec -T matrix-synapse-server register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml -u admin -p m@trix@PNK! -a
+docker exec -t matrix-synapse-server register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml -u admin -p m@trix@PNK! -a
 
 
 echo "Updating the master .env records..."
