@@ -29,7 +29,7 @@ sudo systemctl enable docker
 
 sudo groupadd docker
 
-LOCAL_USER=$($USER)
+LOCAL_USER=$(whoami)
 sudo usermod -aG docker "$LOCAL_USER"
 
 newgrp docker <<EONG

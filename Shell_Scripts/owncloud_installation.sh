@@ -8,11 +8,14 @@ echo "Creating OwnCloud Directory..."
 mkdir -p owncloud
 cd owncloud
 
+SERVER_NAME=$(hostname)
+echo "The hostname of this machine is: $SERVER_NAME"
+
 echo "Creating .env file..."
 cat <<EOF > .env
 OWNCLOUD_VERSION=10.16.1
 OWNCLOUD_DOMAIN=localhost:8080
-OWNCLOUD_TRUSTED_DOMAINS=localhost, pnkv4, pnkv4.local
+OWNCLOUD_TRUSTED_DOMAINS=localhost, pnkv4, pnkv4.local, "$SERVER_NAME", "$SERVER_NAME".local
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=$(openssl rand -base64 16)
 OWNCLOUD_DB_USERNAME=owncloud

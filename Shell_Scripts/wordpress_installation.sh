@@ -58,7 +58,7 @@ echo "Wordpress setup complete!"
 echo "Updating the master .env records..."
 
 SOURCE=".env"
-DEST="/home/admin/.env"
+DEST="$HOME/.env"
 
 if [ -f "$DEST" ]; then
     echo "Destination File exists..."

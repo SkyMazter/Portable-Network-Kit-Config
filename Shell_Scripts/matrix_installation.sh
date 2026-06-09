@@ -60,9 +60,6 @@ echo "docker-compose.yml created."
 mkdir -p files
 mkdir -p schemas
 
-# Ask for server name
-# read -p "Enter your Matrix server name (example: matrix.example.com): " SERVER_NAME
-
 echo "Generating Matrix configuration..."
 
 sudo docker compose run --rm \
@@ -107,7 +104,7 @@ docker exec -t matrix-synapse-server register_new_matrix_user http://localhost:8
 echo "Updating the master .env records..."
 
 SOURCE=".env"
-DEST="/home/admin/.env"
+DEST="$HOME/.env"
 
 if [ -f "$DEST" ]; then
     echo "Destination File exists..."
@@ -120,5 +117,6 @@ else
     cat "$SOURCE" >> "$DEST"
     echo "Master .env file created..."
 fi
+
 
 echo "You can now access Matrix via Cinny on http://$HOSTNAME:9002"
