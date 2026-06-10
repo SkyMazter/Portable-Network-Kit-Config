@@ -216,6 +216,9 @@ fn main() {
     }
 
     if prompt_yes_no("Would you like to install the unifi controller?").unwrap() {
+        if let true = install_docker_container("unifi", home_path.as_str()) {
+            println!("Installation Complete")
+        }
     } else {
     }
     //Run Figlet
