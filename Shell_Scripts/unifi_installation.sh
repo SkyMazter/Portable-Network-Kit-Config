@@ -26,6 +26,8 @@ echo "Running installer..."
 sudo ./"$INSTALL_FILE"
 
 echo "Adding service to usergroup..."
-usermod -aG uosserver admin
+
+LOCAL_USER=$(whoami)
+sudo usermod -aG uosserver "$LOCAL_USER"
 
 echo "UniFi OS installation script completed."
