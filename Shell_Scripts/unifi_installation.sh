@@ -23,7 +23,7 @@ echo "Making installer executable..."
 chmod +x "$INSTALL_FILE"
 
 echo "Running installer..."
-sudo ./"$INSTALL_FILE" -y
+./"$INSTALL_FILE"
 
 echo "Adding service to usergroup..."
 usermod -aG uosserver admin

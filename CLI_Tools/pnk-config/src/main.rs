@@ -73,6 +73,23 @@ fn run_bash_script(path: &str) -> Result<ExitStatus, Error> {
     }
 }
 
+fn run_unifi_script(path: &str) -> Result<ExitStatus, Error> {
+    let mut child = Command::new("bash")
+        .arg(path)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .spawn()?;
+
+    if let Some(mut stdin) = child.stdin.take() {
+        stdin.write_all(b"y\n")?;
+        // drop(stdin) to close
+    }
+
+    let status = child.wait()?; // returns ExitStatus
+    Ok(status)
+}
+
 fn prompt_yes_no(prompt: &str) -> Option<bool> {
     print!(">>> {} (y/N): ", prompt);
     io::stdout().flush().expect(">>> Failed to flush stdout");
@@ -216,8 +233,15 @@ fn main() {
     }
 
     if prompt_yes_no("Would you like to install the unifi controller?").unwrap() {
-        if let true = install_docker_container("unifi", home_path.as_str()) {
-            println!("Installation Complete")
+        let file_name: String = format!("{}_installation.sh", "unifi");
+        let path: String = get_file_location(file_name.as_str().trim(), home_path.as_str());
+        match run_unifi_script(path.as_str()) {
+            Ok(_) => {
+                println!("Unifi Installed")
+            }
+            Err(e) => {
+                eprintln!("{}", e);
+            }
         }
     } else {
     }
