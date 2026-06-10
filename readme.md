@@ -1,6 +1,6 @@
 # Portable-Network-Kit-Config
 
-A brief description of what this project does.
+The PNK (Portable Network Kit) v4 software image by Community Tech NY is a custom-built platform for creating portable, offline mesh networks. It provides essential tools and resources to support community connectivity and information-sharing, even in areas without internet access. This version enhances stability, simplifies setup, and includes pre-configured open-source applications, making it easy for users to deploy localized, resilient networks for community-driven communication and data sharing. This is a program written by Oscar Comunidad(SkyMazter) to serve as an installer fro the server program that runs a PNK.
 
 ## Table of Contents
 
