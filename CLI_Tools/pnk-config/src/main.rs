@@ -50,8 +50,6 @@ fn run_command(cmd: &str, args: Option<&[&str]>) -> Result<Output, Error> {
 
 fn run_bash_script(path: &str) -> Result<ExitStatus, Error> {
     let script = Command::new("bash")
-        // .arg("-c")
-        // .arg("bash")
         .arg(path)
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
@@ -202,10 +200,21 @@ fn main() {
 
     let docker_services: Vec<&str> = vec!["wordpress", "matrix", "owncloud", "etherpad"];
     for service in docker_services {
-        if install_docker_container(service, home_path.as_str()) {
-            print!("some")
+        println!(
+            "Now installing {}, if the container is already running this will reinitiate the container.",
+            service
+        );
+        if prompt_yes_no("Would you like to proceed with the install?").unwrap() {
+            if let true = install_docker_container(service, home_path.as_str()) {
+                println!("Installation Complete")
+            }
         } else {
+            println!("Skipping to the next service...");
         }
+    }
+
+    if prompt_yes_no("Would you like to install the unifi controller?").unwrap() {
+    } else {
     }
     //Run Figlet
     //Check for internet connection
