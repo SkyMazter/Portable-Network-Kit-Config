@@ -48,7 +48,7 @@ fi
 
 echo "Docker is installed."
 
-Check if Docker daemon is running
+#Check if Docker daemon is running
 if docker info > /dev/null 2>&1
 then
     echo "Docker is running."

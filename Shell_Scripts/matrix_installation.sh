@@ -96,10 +96,9 @@ echo "Synapse setup complete."
 echo "Cinny setup complete."
 echo "Create your admin user"
 
-
-
-docker exec -t matrix-synapse-server register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml -u admin -p m@trix@PNK! -a
-
+newgrp docker <<EONG
+    docker exec -t matrix-synapse-server register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml -u admin -p m@trix@PNK! -a
+EONG
 
 echo "Updating the master .env records..."
 
