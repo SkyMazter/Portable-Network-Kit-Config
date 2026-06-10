@@ -28,7 +28,9 @@ fn run_command(cmd: &str, args: Option<&[&str]>) -> Result<Output, Error> {
                 command.arg(arg);
             }
         }
-        None => {}
+        None => {
+            eprint!("No Args Provided...")
+        }
     }
 
     let output = command.output()?;
