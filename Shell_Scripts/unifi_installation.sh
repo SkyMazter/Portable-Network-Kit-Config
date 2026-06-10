@@ -4,11 +4,11 @@ set -e
 echo "Starting UniFi OS Server installation..."
 
 # Ensure script is running as root
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run this script as root:"
-  echo "sudo ./unifi_install.sh"
-  exit 1
-fi
+# if [ "$EUID" -ne 0 ]; then
+#   echo "Please run this script as root:"
+#   echo "sudo ./unifi_install.sh"
+#   exit 1
+# fi
 
 echo "Installing Podman"
 sudo apt-get install podman -y
@@ -23,7 +23,7 @@ echo "Making installer executable..."
 chmod +x "$INSTALL_FILE"
 
 echo "Running installer..."
-./"$INSTALL_FILE"
+sudo ./"$INSTALL_FILE"
 
 echo "Adding service to usergroup..."
 usermod -aG uosserver admin

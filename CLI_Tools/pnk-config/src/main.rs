@@ -132,6 +132,8 @@ fn install_docker_container(service: &str, path: &str) -> bool {
     }
 }
 
+fn install_unifi_app() -> bool {}
+
 fn main() {
     let cli: Cli = Cli::parse();
     let cmd: &str = "figlet";
@@ -216,16 +218,9 @@ fn main() {
     }
 
     if prompt_yes_no("Would you like to install the unifi controller?").unwrap() {
-        if let true = install_docker_container("unifi", home_path.as_str()) {
-            println!("Installation Complete")
-        }
+        // if let true = install_docker_container("unifi", home_path.as_str()) {
+        //     println!("Installation Complete")
+        // }
     } else {
     }
-    //Run Figlet
-    //Check for internet connection
-    //Check for bash scripts
-    // check if docker is installed
-    //  install docker if not installed
-    // check if docker containers are running
-    //  install images if not installed, start containers if not running
 }
