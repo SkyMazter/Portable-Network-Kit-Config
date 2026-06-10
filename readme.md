@@ -6,8 +6,7 @@ A brief description of what this project does.
 
 1. [Installation](#installation)
 2. [Usage](#usage)
-3. [Contributing](#contributing)
-4. [License](#license)
+3. [License](#license)
 
 ## Installation
 
@@ -42,6 +41,22 @@ By running the following command you will be prompted to install the required ap
 pnk-config
 ```
 
+In order to keep up with the latest version of this installer, run the following command to update the program
+
+```sh
+pnk-update
+```
+
+### App Ports
+
+The applications can be accessed locally via the following ports:
+
+- **WordPress:** http://<You_hostname>/
+- **Unifi:** https://<You_hostname>:11443/
+- **Etherpad:** http://<You_hostname>:9001/
+- **Cinny:** http://<You_hostname>:9002/
+- **Owncloud:** http://<You_hostname>:9003/
+
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details.
