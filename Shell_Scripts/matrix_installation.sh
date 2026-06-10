@@ -91,14 +91,12 @@ room_list_publication_rules:
 EOF
 
 # Start server
-docker compose up -d
 echo "Synapse setup complete."
 echo "Cinny setup complete."
 echo "Create your admin user"
 
-newgrp docker <<EONG
-    docker exec -t matrix-synapse-server register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml -u admin -p m@trix@PNK! -a
-EONG
+
+sudo docker exec -t matrix-synapse-server register_new_matrix_user http://localhost:8008 -c /data/homeserver.yaml -u admin -p m@trix@PNK! -a
 
 echo "Updating the master .env records..."
 
