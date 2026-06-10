@@ -51,11 +51,11 @@ pnk-update
 
 The applications can be accessed locally via the following ports:
 
-- **WordPress:** http://<You_hostname>/
-- **Unifi:** https://<You_hostname>:11443/
-- **Etherpad:** http://<You_hostname>:9001/
-- **Cinny:** http://<You_hostname>:9002/
-- **Owncloud:** http://<You_hostname>:9003/
+- **WordPress:** http://<Your_hostname>/
+- **Unifi:** https://<Your_hostname>:11443/
+- **Etherpad:** http://<Your_hostname>:9001/
+- **Cinny:** http://<Your_hostname>:9002/
+- **Owncloud:** http://<Your_hostname>:9003/
 
 ## License
 
