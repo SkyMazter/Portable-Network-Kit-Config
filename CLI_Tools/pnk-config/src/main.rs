@@ -220,15 +220,15 @@ fn main() {
     let docker_services: Vec<&str> = vec!["wordpress", "matrix", "owncloud", "etherpad"];
     for service in docker_services {
         println!(
-            "Now installing {}, if the container is already running this will reinitiate the container.",
+            "\n>>> Now installing {}, if the container is already running this will reinitiate the container.",
             service
         );
         if prompt_yes_no("Would you like to proceed with the install?").unwrap() {
             if let true = install_docker_container(service, home_path.as_str()) {
-                println!("Installation Complete")
+                println!("\n>>> Installation Complete...")
             }
         } else {
-            println!("Skipping to the next service...");
+            println!("\n >>>Skipping to the next service...");
         }
     }
 
