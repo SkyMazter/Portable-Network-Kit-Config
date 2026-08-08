@@ -5,7 +5,9 @@ use std::process::{Command, ExitStatus, Output, Stdio, exit};
 use std::time::Duration;
 
 #[derive(Parser)]
-#[command(version, about, long_about = None)]
+#[command(name = "pnk-config")]
+#[command(version = "1.0")]
+#[command(about = "Runs a ", long_about = None)]
 struct Cli {
     #[arg(short, long)]
     service: Option<String>,
